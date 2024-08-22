@@ -444,8 +444,6 @@ def get_syndicate_items(syndicate_name: str, market_map: None | list[MarketItem]
             "Conclave",
         ] + ['Cavia']
 
-        should filter out most non-mod items. only work on the main 6 syndicates
-
         ref. https://github.com/WFCD/warframe-drop-data
     """
     from data.syndicate_data import additional_syndicates

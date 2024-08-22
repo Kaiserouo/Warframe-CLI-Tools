@@ -7,7 +7,6 @@ from prompt_toolkit.document import Document
 from joblib import Parallel, delayed
 from tabulate import tabulate
 from tqdm import tqdm
-import colorama
 
 market_items = wfm.get_market_item_list()
 market_map = wfm.get_market_items_name_map(market_items)

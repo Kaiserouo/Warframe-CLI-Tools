@@ -35,14 +35,15 @@ Note:
 ```
 
 ## Warning
-- Spaghetti code. I tried to make it easier to maintain in `warframe_market.py` but i literally just gave up in `interactive.py`.
-- **The price oracle (`PriceOracle`) should be changed to fit your needs!!!!!** This is the sole reason why I made this whole thing because sometimes alecaframe doesn't show reasonable price and, according to what items I wanna deal with, the price oracle should change accordingly, too. **Don't just use this without knowing what you're doing. At least check if the price oracle fits your needs.**
+- Spaghetti code. You can argue I don't have any idea how to structure my code properly. I tried to make it easier to maintain in `warframe_market.py` but i literally just gave up in `interactive.py`.
+- **The price oracle (`PriceOracle`) should be changed to fit your needs!** This is the sole reason why I made this whole thing because sometimes alecaframe doesn't show reasonable price and, according to what items I wanna deal with, the price oracle should change accordingly, too. **Don't just use this without knowing what you're doing. At least check if the price oracle fits your needs.**
   - e.g., if an item is common and the price is relatively stable (e.g., equilibrium), I might want to use the median price for the last 48 hours or so.
   - e.g., when a prime is just out (e.g., sevagoth prime as of now), I might only wanna look at the price of the last 3 hours because of how fast the price drops and if i use the price several hours or days ago I am never gonna sell anything.
+  - i haven't written the code to choose the price oracle in the CLI for now. please change the code directly. at least im doing it this way for now.
 - Mostly useful when you wanna query a lot of items all at once, instead of looking at warframe market page one item at a time.
 - A little bit faster than to type the thing on google or warframe market imo, because of the substring matching and stuff.
 - Syndicate function can deal with your syndicate standing spending needs if you don't wanna just put all that into relic packs (or, in some syndicate, you can't even buy relic packs so you gotta find something else to sell)
 - Relic expected plat calculation is another reason why I made this, because aya relics are not in the database for some reason and alecaframe can't calculate the expected value per relic. I don't have much aya so I'm just gonna calculate that expected price on my own.
 - Can also do some weird things that I parsed all warframe market data. Not implemented btw.
   - e.g., auto notify when an item with your expected sell price appears, because I seriously think no one uses the buy function on the market.
-  - e.g., auto trading market, e.g., always set your price the second or third lowest price, because sometimes the one lowest price isn't actually online when they say they're online in game and someone might wanna buy from the second / third lowest price. Need a lot of careful treatment because anyone can put weird sell order on there and you might get screwed if your program doesn't handle special cases good enough.
+  - e.g., auto pricing, e.g., always set your price the second or third lowest price, because sometimes the one lowest price isn't actually online when they say they're online in game and someone might wanna buy from the second / third lowest price. Need a lot of careful treatment because anyone can put weird sell order on there and you might get screwed if your program doesn't handle special cases good enough.
