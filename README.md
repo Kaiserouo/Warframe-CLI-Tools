@@ -46,4 +46,3 @@ Note:
 - Relic expected plat calculation is another reason why I made this, because aya relics are not in the database for some reason and alecaframe can't calculate the expected value per relic. I don't have much aya so I'm just gonna calculate that expected price on my own.
 - Can also do some weird things that I parsed all warframe market data. Not implemented btw.
   - e.g., auto notify when an item with your expected sell price appears, because I seriously think no one uses the buy function on the market.
-  - e.g., auto pricing, e.g., always set your price the second or third lowest price, because sometimes the one lowest price isn't actually online when they say they're online in game and someone might wanna buy from the second / third lowest price. Need a lot of careful treatment because anyone can put weird sell order on there and you might get screwed if your program doesn't handle special cases good enough.
