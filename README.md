@@ -1,5 +1,7 @@
 # Warframe CLI Tool
 
+![](./asset/screenshot.png)
+
 I need some functionality that I want full control of, so, um, this.
 
 I parsed some warframe market API (api.warframe.market) related to current price or past statistics so I guess you can yoink my spaghetti code.
