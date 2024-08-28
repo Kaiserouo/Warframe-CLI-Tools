@@ -318,14 +318,14 @@ class PriceOracle:
             must be prepare()-ed first
         """
         # return self.get_avg_median_price_for_last_hours(48, 0.5, **stat_filter)
-        # return self.get_top_k_avg_price_for_last_hours(48, 0.3, **stat_filter)
-        price = self.get_top_k_avg_price_for_last_hours(3, 1, **stat_filter)
-        if price > 0: return price
+        return self.get_top_k_avg_price_for_last_hours(48, 0.3, **stat_filter)
+        # price = self.get_top_k_avg_price_for_last_hours(3, 1, **stat_filter)
+        # if price > 0: return price
 
-        price = self.get_top_k_avg_price_for_last_hours(48, 0.3, **stat_filter)
-        if price > 0: return price
+        # price = self.get_top_k_avg_price_for_last_hours(48, 0.3, **stat_filter)
+        # if price > 0: return price
 
-        return self.orders.get_ingame_topK_buy_price(5, mod_rank_range=stat_filter.get('mod_rank_range', [0]))
+        # return self.orders.get_ingame_topK_buy_price(5, mod_rank_range=stat_filter.get('mod_rank_range', [0]))
 
 class MarketItem:
     def __init__(self, market_json: dict, api_version: str = 'v1'):

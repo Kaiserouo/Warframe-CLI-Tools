@@ -41,17 +41,15 @@ def print_syndicate_info(syndicate_name: str):
 
     def task(item: wfm.MarketItem):
         item.prepare()
-        orders = item.orders
-        stat = item.statistic
         price = item.price.get_oracle_price_48hrs()
-        volume = stat.get_volume_for_last_hours(48)
+        volume = item.statistic.get_volume_for_last_hours(48)
         url = item.get_wfm_url()
         return (item, price, volume, url)
         
     with util.tqdm_joblib(tqdm(range(len(market_items)), 'Fetching items...')) as tqdm_progress:
         result = Parallel(n_jobs=5)(delayed(task)(item) for item in market_items)
 
-    def print_all_item(item_ls: list[tuple[wfm.MarketItem, int, int]], prefix: str):
+    def print_all_item(item_ls: list[tuple[wfm.MarketItem, int, int, str]], prefix: str):
         item_ls = [(i[0].item_name, i[1], i[2], i[3]) for i in item_ls]
         print(tabulate(item_ls, headers=('Name', 'Plat', 'Volume', 'URL'), tablefmt="rounded_outline"))
     
@@ -64,8 +62,17 @@ def print_syndicate_info(syndicate_name: str):
 def print_relic_info(relic_data=None, level='Radiant'):
     """
         relic data: dict{name: dict{rarity: list of valuables}}
-        rarity in ['common', 'uncommon', 'rare'], all valuables should have an entry in market
-        don't include forma blueprint
+        rarity in ['Common', 'Uncommon', 'Rare'], all valuables should have an entry in market
+        do NOT include forma blueprint in your relic data
+
+        e.g., {
+            'Meso S14': {
+                'Common': ['Ankyros Prime Gauntlet', 'Burston Prime Stock'],
+                'Uncommon': ['Ember Prime Neuroptics Blueprint', 'Rhino Prime Neuroptics Blueprint'],
+                'Rare': ['Sicarus Prime Receiver']
+            }, 
+            ...
+        }
     """
 
     def check_name_integrity(market_map, relics):
@@ -165,7 +172,7 @@ def syndicate_function():
             "Solaris United", "Entrati", "Ostron", "The Holdfasts", "Kahl's Garrison", "Operational Supply", 
             "Conclave",
         ] + ['Cavia']
-    syndicate_selecter = WordCompleter(syndicate_ls + ['Quit', 'quit'], ignore_case=True)
+    syndicate_selecter = WordCompleter(syndicate_ls + ['Quit', 'quit'], ignore_case=True, sentence=True, match_middle=True)
     while True:
         text = prompt('Enter syndicate (or type "Quit" to quit): ', completer=syndicate_selecter)
         if text in ['Quit', 'quit']:
@@ -265,7 +272,7 @@ def main_interactive():
         'quit': quit_function
     }
     print_welcome_message()
-    function_selecter = WordCompleter(list(function.keys()), ignore_case=True)
+    function_selecter = WordCompleter(list(function.keys()), ignore_case=True, sentence=True, match_middle=True)
     while True:
         text = prompt('Enter function: ', completer=function_selecter)
         if text in ['Quit', 'quit']:
