@@ -46,3 +46,12 @@ Note:
 - Relic expected plat calculation is another reason why I made this, because aya relics are not in the database for some reason and alecaframe can't calculate the expected value per relic. I don't have much aya so I'm just gonna calculate that expected price on my own.
 - Can also do some weird things that I parsed all warframe market data. Not implemented btw.
   - e.g., auto notify when an item with your expected sell price appears, because I seriously think no one uses the buy function on the market.
+
+
+## Trivia
+
+### Browser CLI
+
+I tried to use some python REPL on browser stuff to make this thing run directly on browser (because i just don't wanna properly port a CLI program onto browser myself). It turns out to be almost impossible, at least without some heavy code changing:
+- All `requests` cannot be done if not using javascript's fetch (probably because of some CORS stuff). This is a relatively small problem as long as I can know if the code is currently running in browser.
+- `prompt_toolkit` is doomed. Pyodite claimed that the module `termios` (which is required by `wcwidth`, further which is required by `prompt_toolkit`) is not possible on pyodute due to "browser limits"
