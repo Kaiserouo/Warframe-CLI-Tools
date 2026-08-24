@@ -63,6 +63,24 @@ export default function Test({setting}) {
           }
           renderInfoboxContent={() => <p className="whitespace-nowrap">Infobox content for ABC</p>}
         />
+
+        <Infobox 
+          renderHeader={() => <a 
+              className={`text-yellow-400 font-bold underline decoration-dashed underline-offset-3 text-lg font-bold`} 
+              href={null} target="_blank" rel="noopener noreferrer"
+            >
+              ABC
+            </a>
+          }
+          renderInfoboxContent={() => {
+            return <>
+              <p className="whitespace-nowrap">Infobox content for ABC</p>;
+              <Infobox renderHeader={() => <span>Inner Infobox</span>} renderInfoboxContent={() => <p>Content for inner infobox</p>} />
+              <Infobox renderHeader={() => <span>Inner Infobox</span>} renderInfoboxContent={() => <p>Content for inner infobox</p>} />
+              <Infobox renderHeader={() => <span>Inner Infobox</span>} renderInfoboxContent={() => <p>Content for inner infobox</p>} />
+            </>
+          }}
+        />
       </div>
     </div>
   </>);

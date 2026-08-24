@@ -1,3 +1,4 @@
+from collections import defaultdict
 import sys
 from pathlib import Path
 import json
@@ -152,6 +153,13 @@ class WarframePublicExport:
     def _clean_public_export_cache(self):
         self._export_map_cache.clear()
         self._export_cache.clear()
+
+    def _prefetch_all_public_export(self, lang='en'):
+        """
+        quite literally get all available public export data and cache them
+        """
+        for export_name in self._get_public_export_map(lang, use_cache=True).keys():
+            self._get_public_export(export_name, lang, use_cache=True)
 
     def _get_public_export_map(self, lang='en', use_cache=True):
         """
@@ -334,6 +342,135 @@ class WarframePublicExport:
         }
         return mods_un_map
 
+    def get_relic_reward(self, lang='en', use_cache=True):
+        """
+            return {
+                "/Lotus/Types/Game/Projections/T4VoidProjectionTitaniaPrimeAPlatinum": {
+                    "name": "Axi G4 Relic",
+                    "relicRewards": {
+                        "/Lotus/StoreItems/Types/Recipes/Weapons/WeaponParts/GramPrimeHandle": {
+                            "rarity": "RARE",
+                            "itemCount": 1
+                        },
+                        ...
+                    }
+                }
+                ...
+            }
+        """
+        
+        relics = self._get_public_export('ExportRelicArcane', lang, use_cache)
+        return {
+            relic['uniqueName']: {
+                'name': relic['name'],
+                'relicRewards': {
+                    relic_reward['rewardName']: {
+                        'rarity': relic_reward['rarity'],
+                        'itemCount': relic_reward['itemCount']
+                    }
+                    for relic_reward in relic['relicRewards']
+                }
+            }
+            for relic in relics if 'relicRewards' in relic
+        }
+
+    def get_relic_sets(self, lang='en', use_cache=True):
+        """
+        return {
+            "/Lotus/Powersuits/Werewolf/VorunaPrime": {
+                "/Lotus/Types/Recipes/WarframeRecipes/VorunaPrimeHelmetBlueprint": 1,
+                "/Lotus/Types/Recipes/WarframeRecipes/VorunaPrimeChassisBlueprint": 1,
+                "/Lotus/Types/Recipes/WarframeRecipes/VorunaPrimeSystemsBlueprint": 1,
+                "/Lotus/Types/Recipes/WarframeRecipes/VorunaPrimeBlueprint": 1
+            },
+            ...
+        }
+
+        we guarentee that all ingredients are from relics,
+        we only return uniqueName for each item
+        note that one item may exist in multiple sets (e.g., Vasto Prime Barrel is needed for both Vasto Prime and Akvasto Prime)
+        """
+        # first we get what exactly are in the relics
+        resource_unames = set([
+            resource["uniqueName"]
+            for resource in self._get_public_export('ExportResources', lang, use_cache)
+        ])
+
+        relic_item_unames = set()
+        for relic in self.get_relic_reward(lang, use_cache).values():
+            relic_item_unames.update(relic['relicRewards'].keys())
+        relic_item_unames = set(
+            [uname.replace('/StoreItems', '', 1) for uname in relic_item_unames]
+        )
+
+        # and we sort out all recipes that uses these items
+        recipes = self._get_public_export('ExportRecipes', lang, use_cache)
+        blueprint_unames = set([recipe['uniqueName'] for recipe in recipes])
+        prime_bp_unames = set.intersection(blueprint_unames, relic_item_unames)
+        prime_product_recipes = {
+            recipe['resultType']: recipe
+            for recipe in recipes
+            if recipe['uniqueName'] in prime_bp_unames
+        }
+
+        # we have assumptions:
+        # 1. all related prime items must have a blueprint in the relic_item_unames
+        # 2. if a product isn't a resource in ExportResource, then it is a final item
+
+        # we try to find all products
+        prime_set = {}
+        for recipe in recipes:
+            if recipe['uniqueName'] not in prime_bp_unames:
+                continue
+            if recipe['resultType'] in resource_unames:
+                continue
+
+            # then this should be a final recipe, we try to reduce this
+            ingredients = defaultdict(int)
+            for ingredient in recipe['ingredients']:
+                # note that we use "+=" instead of "=" because there might be duplicate items
+                # in the recipe (e.g., in Akvasto Prime, there are 2 Vasto Prime listed separately)
+                ingredients[ingredient["ItemType"]] += ingredient["ItemCount"]
+            ingredients[recipe['uniqueName']] += 1
+
+            keep_loop = True
+            while keep_loop:
+                keep_loop = False
+                new_ingredients = defaultdict(int)
+                for ingredient in ingredients:
+                    if ingredient in relic_item_unames:
+                        new_ingredients[ingredient] += ingredients[ingredient]
+                        continue
+
+                    keep_loop = True
+
+                    if ingredient not in prime_product_recipes:
+                        continue    # not even related to this whole thing
+
+                    # then this ingredient should be a prime product, we try to find its recipe and reduce it
+                    sub_recipe = prime_product_recipes[ingredient]
+                    new_ingredients[sub_recipe['uniqueName']] += ingredients[ingredient]
+                    for sub_ingredient in sub_recipe['ingredients']:
+                        new_ingredients[sub_ingredient['ItemType']] += sub_ingredient['ItemCount'] * ingredients[ingredient]
+                
+                ingredients = new_ingredients
+
+            prime_set[recipe['resultType']] = ingredients
+        return prime_set
+
+    def get_name_lookup_map(self, lang='en', use_cache=True):
+        """
+        get all name lookups, literally all possible names that you may need
+        return {uname -> name} for all items whenever applicable
+        """
+        name_lookup = {}
+        for export_name in self._get_public_export_map(lang, use_cache=True).keys():
+            data = self._get_public_export(export_name, lang, use_cache)
+            for entry in data:
+                if 'uniqueName' in entry and 'name' in entry:
+                    name_lookup[entry['uniqueName']] = entry['name']
+        return name_lookup
+        
 def main_public_export():
     # https://wiki.warframe.com/w/Public_Export
     wd = WarframePublicExport()
@@ -733,13 +870,22 @@ def main_get_platform_name():
     print(list(get_discriminator("Orrka", i) for i in range(6)))
 
 def main_explore_inventory():
-    if len(sys.argv) < 2:
-        p = Path("/mnt/c/Users/User/AppData/Local/AlecaFrame/lastData.dat")
-    else:
-        p = Path(sys.argv[1])
-    inv = get_inventory(p)
-    with open('./export/inv.json', 'w') as f:
-        f.write(json.dumps(inv, indent=4))
+    # if len(sys.argv) < 2:
+    #     p = Path("/mnt/c/Users/User/AppData/Local/AlecaFrame/lastData.dat")
+    # else:
+    #     p = Path(sys.argv[1])
+    # inv = get_inventory(p)
+    # with open('./export/inv.json', 'w') as f:
+    #     f.write(json.dumps(inv, indent=4))
+    
+    with open('./export/inv.json', 'r') as f:
+        inv = json.load(f)
+
+    # a = [item['ItemType'] for item in inv['MiscItems'] if item['ItemType'].startswith('/Lotus/Types/Game/Projections')]
+    # print(a)
+    s = WarframePublicExport().get_relic_sets()
+    with open('./export/wfe_relic_sets.json', 'w') as f:
+        f.write(json.dumps(s, indent=4))
 
 class WarframeWiki:
     def __init__(self):
@@ -851,8 +997,8 @@ if __name__ == '__main__':
     # main_incarnon_riven()
     # main_incarnon()
     # main_corrupted_mods()
-    # main_explore_inventory()
-    WarframeWiki().main()
+    main_explore_inventory()
+    # WarframeWiki().main()
     # main_get_platform_name()
     # main_public_export()
     # main_disposition()

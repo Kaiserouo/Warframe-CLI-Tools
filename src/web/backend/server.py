@@ -63,8 +63,11 @@ def refresh():
     ducat_data = wfm.get_ducat_data(market_items)
     market_data_update_date = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8)))
     wpe = WarframePublicExport()
+    print(f'{util.GREEN}[*] get public export data...{util.RESET}')
+    wpe._prefetch_all_public_export(lang='en')
     wwiki = WarframeWiki()
     cache = {}
+
 
 def use(name, callback):
     """
@@ -907,10 +910,13 @@ def data_public_export(lang, function_name):
         'get_incarnon_weapons': lambda lang: wpe.get_incarnon_weapons(use_cache=True),
         'get_icon_map': lambda lang: wpe.get_icon_map(use_cache=True),
         'get_mod_name_map': lambda lang: wpe.get_mod_name_map(use_cache=True),
+        'get_relic_reward': lambda lang: wpe.get_relic_reward(lang, use_cache=True),
+        'get_relic_sets': lambda lang: wpe.get_relic_sets(lang, use_cache=True),
+        'get_name_lookup_map': lambda lang: wpe.get_name_lookup_map(lang, use_cache=True)
     }
 
     if function_name in function_map:
-        return function_map[function_name](lang)
+        return use(f'PUBLIC_EXPORT_{lang}__{function_name}', lambda: function_map[function_name](lang))
     else:
         return {'error': 'Function not found'}, 404
 
@@ -923,7 +929,7 @@ def data_wiki(function_name):
     }
 
     if function_name in function_map:
-        return function_map[function_name]()
+        return use(f'WIKI__{function_name}', lambda: function_map[function_name]())
     else:
         return {'error': 'Function not found'}, 404
 
