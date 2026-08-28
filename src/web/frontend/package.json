@@ -4,9 +4,9 @@
   "main": "/src/index.js",
   "scripts": {
     "start": "vite",
-    "start:github": "vite -c vite.github.page.config.js",
+    "start:github": "vite --mode github",
     "build": "vite build",
-    "build:github": "vite build -c vite.github.page.config.js",
+    "build:github": "vite build --mode github",
     "serve": "vite preview"
   },
   "dependencies": {

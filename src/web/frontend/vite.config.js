@@ -3,11 +3,15 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import svgr from "vite-plugin-svgr";
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const isGithubPage = (mode === 'github');
+
   return {
     build: {
-      outDir: 'build',
+      outDir: isGithubPage ? 'build_github_page' : 'build',
     },
+
+    base: isGithubPage ? '/Warframe-Tools/' : '/',
 
     plugins: [
       react(),
