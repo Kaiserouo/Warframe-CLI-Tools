@@ -29,7 +29,5 @@
       - the count of each relic
       - max(lackingCount for all items in this relic)
 - deploy the inventory page on github page
-  - see if you can have ways to build a custom page or something, different from a normal build
-  - see what github-page is about
-  - see what github action can you do to actually make the page in github
-    - AND see how much it actually cost
+  - see what happens with get_api (LZML encoding error???? what???)
+  - see what even returned from api

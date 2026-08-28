@@ -175,6 +175,8 @@ class WarframePublicExport:
             return self._export_map_cache[lang]
         response = requests.get(f'https://origin.warframe.com/PublicExport/index_{lang}.txt.lzma')
         data = response.content
+        print('Fetching public export map for lang:', lang, f'({len(data)} bytes)')
+        print('Data: ', data)
         lzma_data = lzma.decompress(data)
         """
         in the form of:
