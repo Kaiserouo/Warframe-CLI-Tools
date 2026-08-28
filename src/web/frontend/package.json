@@ -4,6 +4,7 @@
   "main": "/src/index.js",
   "scripts": {
     "start": "vite",
+    "start:github": "vite -c vite.github.page.config.js",
     "build": "vite build",
     "build:github": "vite build -c vite.github.page.config.js",
     "serve": "vite preview"

@@ -144,9 +144,9 @@ function SettingInventoryFile({setting, setSetting}) {
 function NavbarSettingMenuInner({setting, setSetting}) {
   return (
     <div className="mt-2 bg-gray-700 text-white rounded shadow-lg z-10 md:min-w-max">
-      <SettingItemRefreshMarketData setting={setting} setSetting={setSetting} />
-      <SettingItemPriceOracle setting={setting} setSetting={setSetting} />
-      <SettingItemDucantorPriceOverride setting={setting} setSetting={setSetting} />
+      {setting.env_setting.is_github_page ? null : <SettingItemRefreshMarketData setting={setting} setSetting={setSetting} />}
+      {setting.env_setting.is_github_page ? null : <SettingItemPriceOracle setting={setting} setSetting={setSetting} />}
+      {setting.env_setting.is_github_page ? null : <SettingItemDucantorPriceOverride setting={setting} setSetting={setSetting} />}
       <SettingInventoryFile setting={setting} setSetting={setSetting} />
     </div>
   )

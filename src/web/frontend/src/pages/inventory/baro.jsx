@@ -13,7 +13,7 @@ export default function Baro({setting}) {
   })
 
   let itemTable = {};
-  if (baroData && setting.inventory.data) {
+  if (baroData && setting.inventory) {
     const { baro_items: baroItems, mod_name_map: modNameMap, weapon_name_map: weaponNameMap } = baroData;
     const { mod: mods, weapon: weapons } = baroItems;
     console.log(baroData);
@@ -63,7 +63,10 @@ export default function Baro({setting}) {
     {/* we separate the loading progress and error display because if there is still data from last time, we still wanna display that */}
     {baroIsPending ? <Loading message="Loading Baro Data" /> : null}
     {!baroIsPending && baroError ? <Error message={`ERROR: ${baroError}`} /> : null}
-    {baroData && itemTable ? <ItemTable itemTable={itemTable} setting={setting} /> : null}
+    {baroData && setting.inventory !== null ? <ItemTable itemTable={itemTable} setting={setting} /> : null}
+    {setting.inventory === null ? <div className="text-white font-mono my-2 font-extrabold">
+      [ No inventory file loaded. Please load your inventory file in the Options &gt; Inventory File.]
+    </div> : null}
     </div>
   </>);
 }

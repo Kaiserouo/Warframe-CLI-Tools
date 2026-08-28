@@ -49,7 +49,15 @@ export default function Home({setting}) {
         </ul>
         <br />
         <h2 className='text-2xl font-bold text-white'>Inventory</h2>
-        <p></p>
+        <p>With the inventory file, we can do more analysis like how e.g., Alecaframe does its functionalities.</p>
+        <p>For currently available methods (August 2026), we can only get this file on PC (Windows / Linux).</p>
+        <p>You can import the file in <i className='text-cyan-400'>Options (upper left corner) &gt; Inventory File</i>.</p>
+        <p>This file will only stay on your browser and will not be uploaded to the server.</p>
+        <br />
+        <ul className="list-disc list-inside">
+          <li>If you use AlecaFrame: Use <code>%localappdata%/AlecaFrame/lastData.dat</code>.</li>
+          <li>If you don't: Use <a href="https://github.com/Sainan/warframe-api-helper/releases/latest" target="_blank" rel="noopener noreferrer" className='underline text-blue-400 font-bold'>warframe-api-helper</a> while game is on and logged in.</li>
+        </ul>
       </div>
     </div>
   </>);
