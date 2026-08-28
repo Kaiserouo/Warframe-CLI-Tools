@@ -21,8 +21,9 @@ const iconIncarnon = makeIcon("https://wiki.warframe.com/images/LessRecoil%28xWh
 const iconIsEquipped = makeIcon("https://wiki.warframe.com/images/IconIOSEmotes%28xWhite%29.png", "Is currently equipped", "#2E7821", 6)
 const iconHasDuplicate = makeIcon("https://wiki.warframe.com/images/IconModDuplicates%28xWhite%29.png", "Has duplicate riven for this weapon", "#6E2323", 6)
 const makeIconHasDuplicateCount = (count) => makeIcon("https://wiki.warframe.com/images/IconModDuplicates%28xWhite%29.png", `Has ${count} duplicates for this weapon`, "#6E2323", 6, count.toString());
+const iconVariants = makeIcon("https://wiki.warframe.com/images/IconModDuplicates%28xWhite%29.png", "Has variant riven for this weapon", "#6E2323", 6)
 const makeIconVariants = (count) => makeIcon("https://wiki.warframe.com/images/HouseLavan%28xWhite%29.png", "", "#6E2323", 6, count.toString());
-export { iconIncarnon, iconIsEquipped, iconHasDuplicate };
+export { iconIncarnon, iconIsEquipped, iconHasDuplicate, iconVariants };
 
 
 function RivenSide({rivenModInfo}) {
@@ -41,6 +42,7 @@ function RivenSide({rivenModInfo}) {
       </div>
     </>
     : null}
+    
     <div className="px-4">
     </div>
     <div>

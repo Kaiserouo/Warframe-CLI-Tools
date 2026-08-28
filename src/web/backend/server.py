@@ -933,7 +933,6 @@ def data_wiki(function_name):
     else:
         return {'error': 'Function not found'}, 404
 
-
 def _test_best_trade():
     USE_CACHE = True
     CACHE_FILE = Path('server_market_cache.pkl')

@@ -1,5 +1,7 @@
 import { useState, useCallback } from 'react';
 
+import GithubNoPage from './pages/github_page/github_no_page.jsx';
+
 import {
   QueryClient,
   QueryClientProvider,
@@ -18,6 +20,8 @@ import Test from './pages/test.jsx';
 import Inventory from './pages/inventory/main.jsx';
 
 import NavbarSettingMenu from './components/navbar_setting_menu.jsx';
+
+import GithubHome from './pages/github_page/github_home.jsx';
 
 let pageMap = {
   'home': {
@@ -54,25 +58,61 @@ let pageMap = {
   },
 };
 
-export default function App() {
+let githubPageMap = {
+  'home': {
+    'name': 'Home',
+    'factory': (setting) => (<GithubHome setting={setting} />)
+  },
+  'item_info': {
+    'name': 'Item Info',
+    'factory': (setting) => (<GithubNoPage pageTitle="Item Info" />)
+  },
+  'inventory': {
+    'name': 'Inventory',
+    'factory': (setting) => (<Inventory setting={setting} />)
+  },
+}
+
+export default function App({ envSetting }) {
   const defaultSetting = {
     'oracle_type': 'default_oracle_price_48h',
     'ducantor_price_override': 'day',
     'update_count': 1,
     'inventory_file': null,
+
+    // env_setting cannot be mutated
+    'env_setting': {...envSetting},
   }
 
   const [currentPage, setCurrentPage] = useState('home');
   const [setting, setSetting] = useState(
     (() => {
-      const savedSetting = localStorage.getItem('setting');
-      return savedSetting ? JSON.parse(savedSetting) : defaultSetting;
+      try {
+        const savedSetting = localStorage.getItem('setting');
+        console.log('savedSetting', savedSetting)
+        const jsonSetting = JSON.parse(savedSetting)
+        if (savedSetting && jsonSetting) {
+          return {
+            ...defaultSetting,
+            ...jsonSetting,
+            'env_setting': {...envSetting},
+          };
+        }
+        return defaultSetting;
+      } catch (error) {
+        console.error('Error loading setting from localStorage:', error);
+        return defaultSetting;
+      }
     })()
   );
 
   const setSettingAndSave = useCallback((newSetting) => {
     localStorage.setItem('setting', JSON.stringify(newSetting));
-    setSetting(newSetting);
+    // we make sure the user can only change user_setting
+    setSetting({
+      ...newSetting,
+      'env_setting': {...envSetting},
+    });
   }, [setSetting]);
 
   // save to cookie
@@ -99,6 +139,7 @@ function NavbarPage({name, value, setCurrentPage}) {
 
 function Navbar({setCurrentPage, setting, setSetting}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const usedPageMap = setting.env_setting.is_github_page ? githubPageMap : pageMap;
 
   return (<>
     <header className="fixed top-0 left-0 right-0 bg-[#222831] text-white p-4 z-50">
@@ -107,7 +148,7 @@ function Navbar({setCurrentPage, setting, setSetting}) {
 
         {/* Desktop Menu (note that hidden and flex are both specified by "display" so md:flex overrides hidden) */}
         <ul className="hidden md:flex space-x-8 items-center">
-          {Object.entries(pageMap).slice().map(([key, value]) => (
+          {Object.entries(usedPageMap).slice().map(([key, value]) => (
             <NavbarPage key={key} name={value.name} value={key} setCurrentPage={setCurrentPage} />
           ))}
         </ul>
@@ -125,7 +166,7 @@ function Navbar({setCurrentPage, setting, setSetting}) {
       {/* Mobile Menu */}
       {isMenuOpen && (
         <ul className="md:hidden mt-4 space-y-2 flex flex-col">
-          {Object.entries(pageMap).slice().map(([key, value]) => (
+          {Object.entries(usedPageMap).slice().map(([key, value]) => (
             <li key={key}>
               <a href="#" className="hover:text-gray-400" onClick={() => { setCurrentPage(key); setIsMenuOpen(false); }}>
                 {value.name}
@@ -143,9 +184,10 @@ function Navbar({setCurrentPage, setting, setSetting}) {
 }
 
 function MainContent({currentPage, setting}) {
+  const usedPageMap = setting.env_setting.is_github_page ? githubPageMap : pageMap;
   return (
     <div className="pt-16 pb-20">
-      {pageMap[currentPage] ? pageMap[currentPage].factory(setting) : (<p>Page not found</p>)}
+      {usedPageMap[currentPage] ? usedPageMap[currentPage].factory(setting) : (<p>Page not found</p>)}
     </div>
   );
 }

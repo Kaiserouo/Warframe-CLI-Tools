@@ -8,20 +8,20 @@ async function tryFetchJson(url, options = {}) {
 }
 
 export async function fetchMarketData() {
-  return tryFetchJson('/api/get_market_data');
+  return tryFetchJson('api/get_market_data');
 }
 
 export async function fetchRefreshData() {
-  return tryFetchJson('/api/refresh_all_data');
+  return tryFetchJson('api/refresh_all_data');
 }
 
 export async function fetchRelicData() {
-  return tryFetchJson('/api/relic_data');
+  return tryFetchJson('api/relic_data');
 }
 
 export async function fetchFunctionItemSearchText(oracleType, ducantorPriceOverride, searchText) {
   return tryFetchJson(
-    '/api/function_item', {
+    'api/function_item', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -35,7 +35,7 @@ export async function fetchFunctionItemSearchText(oracleType, ducantorPriceOverr
 
 export async function fetchFunctionItemItemList(oracleType, ducantorPriceOverride, itemList) {
   return tryFetchJson(
-    '/api/function_item', {
+    'api/function_item', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -49,7 +49,7 @@ export async function fetchFunctionItemItemList(oracleType, ducantorPriceOverrid
 
 export async function fetchPriceOracle(oracleType, ducantorPriceOverride, itemList) {
   return tryFetchJson(
-    '/api/price_oracle', {
+    'api/price_oracle', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -62,12 +62,12 @@ export async function fetchPriceOracle(oracleType, ducantorPriceOverride, itemLi
 }
 
 export async function fetchSyndicateData() {
-  return tryFetchJson('/api/syndicate_data');
+  return tryFetchJson('api/syndicate_data');
 }
 
 export async function fetchItemInfoboxData(itemName, oracleType, ducantorPriceOverride) {
   return tryFetchJson(
-    '/api/item_infobox', {
+    'api/item_infobox', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -80,13 +80,12 @@ export async function fetchItemInfoboxData(itemName, oracleType, ducantorPriceOv
 }
 
 export async function fetchTransientData() {
-  return tryFetchJson('/api/transient_data');
+  return tryFetchJson('api/transient_data');
 }
-
 
 export async function fetchItemOrders(itemList) {
   return tryFetchJson(
-    '/api/item_orders', {
+    'api/item_orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -98,7 +97,7 @@ export async function fetchItemOrders(itemList) {
 
 export async function fetchBestTrade(oracle_type, spec) {
   return tryFetchJson(
-    '/api/function_best_trade', {
+    'api/function_best_trade', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -111,19 +110,26 @@ export async function fetchBestTrade(oracle_type, spec) {
 
 export async function fetchRivenData() {
   return {
-    weapon_name_map: await tryFetchJson('/api/public_export/data/en/get_weapon_name_map'),
-    weapon_riven_disposition: await tryFetchJson('/api/public_export/data/en/get_weapon_riven_disposition'),
-    riven_loctag_map: await tryFetchJson('/api/public_export/data/en/get_riven_loctag_map'),
-    incarnon_weapon_uname: await tryFetchJson('/api/public_export/data/en/get_incarnon_weapons'),
-    icon_map: await tryFetchJson('/api/public_export/data/en/get_icon_map'),
-    weapon_uname_family_map: await tryFetchJson('/api/wiki/data/get_weapon_uname_family_map'),
-    weapon_family_unames_map: await tryFetchJson('/api/wiki/data/get_weapon_family_unames_map'),
+    weapon_name_map: await tryFetchJson('api/public_export/data/en/get_weapon_name_map'),
+    weapon_riven_disposition: await tryFetchJson('api/public_export/data/en/get_weapon_riven_disposition'),
+    riven_loctag_map: await tryFetchJson('api/public_export/data/en/get_riven_loctag_map'),
+    incarnon_weapon_uname: await tryFetchJson('api/public_export/data/en/get_incarnon_weapons'),
+    icon_map: await tryFetchJson('api/public_export/data/en/get_icon_map'),
+    weapon_uname_family_map: await tryFetchJson('api/wiki/data/get_weapon_uname_family_map'),
+    weapon_family_unames_map: await tryFetchJson('api/wiki/data/get_weapon_family_unames_map'),
   };
 }
 export async function fetchBaroData() {
   return {
-    baro_items: await tryFetchJson('/api/wiki/data/get_baro_items'),
-    mod_name_map: await tryFetchJson('/api/public_export/data/en/get_mod_name_map'),
-    weapon_name_map: await tryFetchJson('/api/public_export/data/en/get_weapon_name_map')
+    baro_items: await tryFetchJson('api/wiki/data/get_baro_items'),
+    mod_name_map: await tryFetchJson('api/public_export/data/en/get_mod_name_map'),
+    weapon_name_map: await tryFetchJson('api/public_export/data/en/get_weapon_name_map')
+  };
+}
+export async function fetchPERelicData() {
+  return {
+    relic_set: await tryFetchJson('api/public_export/data/en/get_relic_set'),
+    relic_reward: await tryFetchJson('api/public_export/data/en/get_relic_reward'),
+    name_lookup_map: await tryFetchJson('api/public_export/data/en/get_name_lookup_map'),
   };
 }

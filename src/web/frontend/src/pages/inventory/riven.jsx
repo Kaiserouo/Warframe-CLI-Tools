@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import SearchBar from '../../components/search_bar.jsx';
 import RivenTable from '../../components/riven_table.jsx';
 import RivenTableLackIncarnon from '../../components/riven_table_lack_incarnon.jsx';
-import { iconIncarnon, iconIsEquipped, iconHasDuplicate } from '../../components/riven_table.jsx';
+import { iconIncarnon, iconIsEquipped, iconHasDuplicate, iconVariants } from '../../components/riven_table.jsx';
 import { Loading, LoadingProgress, Error } from '../../components/loading_status.jsx';
 import { fetchRivenData } from '../../api/fetch.jsx';
 import { makeHandleSubmit } from '../../api/task.jsx';
@@ -245,6 +245,7 @@ export default function Riven({setting}) {
         <span className="flex flex-row items-center">{iconIncarnon}: Is incarnon</span>
         <span className="flex flex-row items-center">{iconIsEquipped}: Is currently equipped</span>
         <span className="flex flex-row items-center">{iconHasDuplicate}: Has duplicate riven for this weapon</span>
+        <span className="flex flex-row items-center">{iconVariants}: Variants for this weapon</span>
       </div>
     </div>
     

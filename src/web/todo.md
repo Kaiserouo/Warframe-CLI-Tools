@@ -28,4 +28,8 @@
         - the final product should have information like: what items is needed, how much do we have and how much (e.g., Volt Prime Blueprint 2/1), also need a multi layer infobox for the item
       - the count of each relic
       - max(lackingCount for all items in this relic)
-  
+- deploy the inventory page on github page
+  - see if you can have ways to build a custom page or something, different from a normal build
+  - see what github-page is about
+  - see what github action can you do to actually make the page in github
+    - AND see how much it actually cost
