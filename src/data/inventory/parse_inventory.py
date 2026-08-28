@@ -173,11 +173,16 @@ class WarframePublicExport:
         """
         if use_cache and lang in self._export_map_cache:
             return self._export_map_cache[lang]
-        response = requests.get(f'https://origin.warframe.com/PublicExport/index_{lang}.txt.lzma')
-        data = response.content
-        print('Fetching public export map for lang:', lang, f'({len(data)} bytes)')
-        print('Data: ', data)
-        lzma_data = lzma.decompress(data)
+        try:
+            response = requests.get(f'https://origin.warframe.com/PublicExport/index_{lang}.txt.lzma')
+            data = response.content
+            lzma_data = lzma.decompress(data)
+        except Exception as e:
+            # sometimes origin.warframe.com is down, we try content.warframe.com instead
+            # https://github.com/WFCD/warframe-items/blob/66c1c1a5452d8d2a2d4aa79fd8e459e29220e34d/build/scraper.ts#L65
+            response = requests.get(f'https://content.warframe.com/PublicExport/index_{lang}.txt.lzma')
+            data = response.content
+            lzma_data = lzma.decompress(data)
         """
         in the form of:
             ExportCustoms_en.json!00_ZJIc6+RSf2aEMuBg6sLAzw

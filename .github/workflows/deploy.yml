@@ -33,8 +33,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Try warframe endpoint
         run: |
-          curl -A "Mozilla/5.0" "https://origin.warframe.com/PublicExport/index_en.txt.lzma" --output -
-          curl -A "Mozilla/5.0" "https://origin.warframe.com/PublicExport/index_en.txt.lzma" | unlzma
+          curl -A "Mozilla/5.0" "https://content.warframe.com/PublicExport/index_en.txt.lzma" | unlzma
 
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
