@@ -1,8 +1,10 @@
 # Warframe CLI Tool
 
 > **For Web GUI, refer to [Web GUI Readme](./src/web/README.md).**
-
-![](./asset/screenshot.png)
+> 
+> **Video Demo (Youtube)**
+> 
+> [<img src="https://img.youtube.com/vi/AZY_MeDa9XM/hqdefault.jpg" width="540" height="360"/>](https://www.youtube.com/watch?v=AZY_MeDa9XM)
 
 I need some functionality that I want full control of, so, um, this.
 
