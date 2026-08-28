@@ -178,7 +178,8 @@ class WarframePublicExport:
             data = response.content
             lzma_data = lzma.decompress(data)
         except Exception as e:
-            # sometimes origin.warframe.com is down, we try content.warframe.com instead
+            # sometimes origin.warframe.com is down (or would blocked you if it is requested on github action server)
+            # we can try content.warframe.com instead, but might be a bit stale
             # https://github.com/WFCD/warframe-items/blob/66c1c1a5452d8d2a2d4aa79fd8e459e29220e34d/build/scraper.ts#L65
             response = requests.get(f'https://content.warframe.com/PublicExport/index_{lang}.txt.lzma')
             data = response.content
