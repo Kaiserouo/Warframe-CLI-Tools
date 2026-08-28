@@ -10,7 +10,7 @@ export default defineConfig(() => {
       outDir: 'build_github_page',
     },
 
-    base: '/warframe-tools/',
+    base: '/Warframe-Tools/',
 
     plugins: [
       react(),
