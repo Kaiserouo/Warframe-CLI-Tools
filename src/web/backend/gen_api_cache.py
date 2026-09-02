@@ -24,6 +24,7 @@ fetch_urls = [
     'api/public_export/data/en/get_relic_set',
     'api/public_export/data/en/get_relic_reward',
     'api/public_export/data/en/get_name_lookup_map',
+    'api/missing_item_checklist'
 ]
 fetch_output_dir_path = Path(argv[1])  # e.g. "./src/web/frontend/build_github_page"
 

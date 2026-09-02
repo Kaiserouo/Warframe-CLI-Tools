@@ -1,16 +1,16 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query'
 import Riven from './riven.jsx';
-import Baro from './baro.jsx';
+import MissingItemChecklist from './missing_item_checklist.jsx';
 
 let pageMap = {
   'riven': {
     'name': 'Riven',
     'factory': (setting) => (<Riven setting={setting} />)
   },
-  'baro': {
-    'name': 'Baro',
-    'factory': (setting) => (<Baro setting={setting} />)
+  'mic': {
+    'name': 'Missing Item Checklist',
+    'factory': (setting) => (<MissingItemChecklist setting={setting} />)
   }
 };
 

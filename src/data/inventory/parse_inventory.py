@@ -899,16 +899,23 @@ class WarframeWiki:
     def __init__(self):
         self.weapon_data_cache = None
         self.baro_data_cache = None
+        self.nightwave_items_cache = None
+        self.warframe_pve_augment_mods_cache = None
 
-    def _get_data_from_url(self, url):
-            """
+    def _get_data_from_url(self, url, decode_lua=True):
+        """
+            if decode_lua is True:
                 we expect the returned text is: "return {...}"
                 and we manually patch out stuff that can't be parsed by luadata, e.g., math.huge
-            """
-            import requests
-            r = requests.get(url)
-            if r.status_code != 200:
-                raise Exception(f"Failed to get data from {url}, status code: {r.status_code}")
+            if decode_lua is False:
+                we just return the text as is
+        """
+        import requests
+        r = requests.get(url)
+        if r.status_code != 200:
+            raise Exception(f"Failed to get data from {url}, status code: {r.status_code}")
+
+        if decode_lua:
             lua_code = r.text
             try:
                 lua_code = lua_code.replace('return ', '', 1)
@@ -918,6 +925,8 @@ class WarframeWiki:
                 print(f"Error occurred while parsing {url}: {e}")
                 raise e
             return data
+        else:
+            return r.text
 
     def _get_all_weapon_data(self, use_cache=True):
         if use_cache and self.weapon_data_cache is not None:
@@ -996,17 +1005,76 @@ class WarframeWiki:
                 items['weapon'].append(item.get('Name', None))
         return items
 
+    def get_nightwave_items(self, use_cache=True):
+        """
+        we only care about mods and weapons
+        """
+        url = "https://wiki.warframe.com/w/Nightwave/Offerings?action=raw"
+        if use_cache and self.nightwave_items_cache is not None:
+            return self.nightwave_items_cache
+        data = self._get_data_from_url(url, decode_lua=False)
+
+        # we find all {{M|mod name}} and {{Weapon|weapon name}}
+        mod_pattern = re.compile(r'\{\{M\|([^}]+)\}\}')
+        weapon_pattern = re.compile(r'\{\{Weapon\|([^}]+)\}\}')
+        mods = mod_pattern.findall(data)
+        weapons = weapon_pattern.findall(data)
+        data = {
+            'mod': list(set(mods)),
+            'weapon': list(set(weapons)),
+        }
+        
+        if use_cache:
+            self.nightwave_items_cache = data
+        return data
+
+    def get_warframe_pve_augment_mods(self, use_cache=True):
+        """
+            return [
+                {"warframe": warframe name, "mods": [mod name, ...], "syndicate": [syndicate name, ...]},
+            ]
+        """
+        url = "https://wiki.warframe.com/w/Warframe_Augment_Mods/PvE?action=raw"
+        if use_cache and self.warframe_pve_augment_mods_cache is not None:
+            return self.warframe_pve_augment_mods_cache
+        data = self._get_data_from_url(url, decode_lua=False)
+
+        # we find all {{M|mod name}} and {{Weapon|weapon name}}
+        augment_mods = []
+        mod_pattern = re.compile(r'\{\{M\|([^}]+)\}\}')
+        warframe_pattern = re.compile(r'\{\{WF\|([^}]+)\}\}')
+        faction_pattern = re.compile(r'\{\{Faction\|([^}]+)\}\}')
+
+        data = "id=\"" + data + "id=\""
+        for text in data.split("id=\"")[1:]:
+            mod = mod_pattern.findall(text)
+            warframe = warframe_pattern.findall(text)
+            faction = faction_pattern.findall(text)
+            if not warframe:
+                continue
+            augment_mods.append({
+                "warframe": warframe[0],
+                "mods": mod,
+                "syndicate": faction,
+            })
+
+        if use_cache:
+            self.warframe_pve_augment_mods_cache = augment_mods
+        return augment_mods
+
+    
     def main(self):
         a = self.get_baro_items()
         with open('./export/warframe_wiki_weapon_data.json', 'w') as f:
             f.write(json.dumps(a, indent=4))
+
 if __name__ == '__main__':
     # main_decrypt_lastdata()
     # main_incarnon_riven()
     # main_incarnon()
     # main_corrupted_mods()
-    main_explore_inventory()
-    # WarframeWiki().main()
+    # main_explore_inventory()
+    print(WarframeWiki().get_augment_mods())
     # main_get_platform_name()
     # main_public_export()
     # main_disposition()

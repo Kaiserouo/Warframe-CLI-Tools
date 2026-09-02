@@ -133,3 +133,11 @@ export async function fetchPERelicData() {
     name_lookup_map: await tryFetchJson('api/public_export/data/en/get_name_lookup_map'),
   };
 }
+
+export async function fetchMissingItemChecklistData() {
+  return {
+    missing_item_checklist: await tryFetchJson('api/missing_item_checklist'),
+    mod_name_map: await tryFetchJson('api/public_export/data/en/get_mod_name_map'),
+    weapon_name_map: await tryFetchJson('api/public_export/data/en/get_weapon_name_map')
+  };
+}

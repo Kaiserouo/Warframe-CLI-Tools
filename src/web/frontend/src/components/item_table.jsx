@@ -70,6 +70,9 @@ function TableItemCell({header, value, setting, sortBy, setSortBy, filterBy, set
       case 'string':
         innerElement = (
           <p className="text-right hover:bg-gray-600 rounded" onClick={() => {
+              if (header?.setting?.filterable === false) {
+                return;
+              }
               if (filterBy.header?.id === header.id && filterBy.value === value.toString()) {
                 setFilterBy({ header: null, value: '' });
               } else {
@@ -116,9 +119,20 @@ function TableItemRow({headers, item, setting, sortBy, setSortBy, filterBy, setF
 }
 
 export default function ItemTable({itemTable, setting}) {
-  // item_table: {"headers": list[dict[str, str]], "items": list[dict[str, Any]]}
-  //     - each header looks like: {"id": str, "name": str, "type": Literal["number", "deviation", "string", "url", "item_name"]}
-  //     - each item is a dict, for each header's id, there should be a corresponding field in item
+  /* 
+    item_table: {"headers": list[dict[str, str]], "items": list[dict[str, Any]]}
+      - each header looks like: 
+        {"id": str, "name": str, "type": Literal["number", "deviation", "string", "url", "item_name"], setting: Optional[dict]}
+        where:
+          - id: a unique ID for this header, will be used to index the items
+          - name: the display name for this header
+          - type: the type of this header, determines how to display the value in this column
+          - setting: (optional) additional setting for this header
+            - filterable: (optional) whether this column is filterable by exact text match, 
+                note that if a string header is filterable, we can't copy the value to clipboard because clicking
+                it will trigger the filter instead. Default True
+      - each item is a dict, for each header's id, there should be a corresponding field in item
+  */
 
   // sorting, default (null, true) for no sorting (use the order from item_table)
   const [sortBy, setSortBy] = useState(null);    // should be a header (i.e., dict[str, str])

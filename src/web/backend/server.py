@@ -975,6 +975,353 @@ def _test_best_trade():
     for i in result['trade_options']:
         print(i)
 
+class MissingItemChecklist:
+    def __init__(self, wwiki, wpe):
+        self.wwiki = wwiki
+        self.wpe = wpe
+
+    
+    bounty_data = {
+        "Cetus Bounty": [
+            ["Gladiator Aegis", "Cetus, Tier 3 Bounty (L20-40), Group A"],
+            ["Augur Accord", "Cetus, Tier 3 Bounty (L20-40), Group A"],
+            ["Vigilante Supplies", "Cetus, Tier 3 Bounty (L20-40), Group A"],
+            ["Vigilante Armaments", "Cetus, Tier 3 Bounty (L20-40), Group B"],
+            ["Gladiator Might", "Cetus, Tier 3 Bounty (L20-40), Group B"],
+            ["Augur Seeker", "Cetus, Tier 3 Bounty (L20-40), Group B"],
+            ["Augur Pact", "Cetus, Tier 3 Bounty (L20-40), Group C"],
+            ["Vigilante Fervor", "Cetus, Tier 3 Bounty (L20-40), Group C"],
+            ["Gladiator Vice", "Cetus, Tier 3 Bounty (L20-40), Group C"],
+            ["Gladiator Rush", "Cetus, Tier 4 Bounty (L30-50), Group A"],
+            ["Augur Reach", "Cetus, Tier 4 Bounty (L30-50), Group A"],
+            ["Vigilante Offense", "Cetus, Tier 4 Bounty (L30-50), Group A"],
+            ["Vigilante Vigor", "Cetus, Tier 4 Bounty (L30-50), Group B"],
+            ["Gladiator Resolve", "Cetus, Tier 4 Bounty (L30-50), Group B"],
+            ["Augur Secrets", "Cetus, Tier 4 Bounty (L30-50), Group B"],
+            ["Augur Message", "Cetus, Tier 4 Bounty (L30-50), Group C"],
+            ["Vigilante Pursuit", "Cetus, Tier 4 Bounty (L30-50), Group C"],
+            ["Gladiator Finesse", "Cetus, Tier 4 Bounty (L30-50), Group C"],
+        ],
+
+        "Cetus Narmer": [
+            ["Boreal's Hatred", "Cetus, Narmer, Group A"],
+            ["Nira's Contempt", "Cetus, Narmer, Group A"],
+            ["Nira's Hatred", "Cetus, Narmer, Group B"],
+            ["Amar's Contempt", "Cetus, Narmer, Group B"],
+            ["Amar's Hatred", "Cetus, Narmer, Group C"],
+            ["Boreal's Contempt", "Cetus, Narmer, Group C"],
+        ],
+
+        "Cetus Ghoul Purge": [
+            ["Hunter Adrenaline", "Ghoul Purge, Tier 1 (L15-25)"],
+            ["Hunter Munitions", "Ghoul Purge, Tier 1 (L15-25)"],
+            ["Hunter Track", "Ghoul Purge, Tier 1 (L15-25)"],
+            ["Hunter Recovery", "Ghoul Purge, Tier 2 (L40-50)"],
+            ["Hunter Synergy", "Ghoul Purge, Tier 2 (L40-50)"],
+            ["Hunter Command", "Ghoul Purge, Tier 2 (L40-50)"],
+        ],
+        "Fortuna Bounty": [
+            ["Synth Charge", "Fortuna, Tier 2 (L10-30), Group A"],
+            ["Mecha Overdrive", "Fortuna, Tier 2 (L10-30), Group B"],
+            ["Tek Assault", "Fortuna, Tier 2 (L10-30), Group C"],
+            ["Synth Deconstruct", "Fortuna, Tier 3 (L20-40), Group A"],
+            ["Mecha Recharge", "Fortuna, Tier 3 (L20-40), Group B"],
+            ["Tek Enhance", "Fortuna, Tier 3 (L20-40), Group C"],
+            ["Synth Fiber", "Fortuna, Tier 4 (L30-50), Group A"],
+            ["Mecha Empowered", "Fortuna, Tier 4 (L30-50), Group B"],
+            ["Tek Gravity", "Fortuna, Tier 4 (L30-50), Group C"],
+            ["Synth Reflex", "Fortuna, Tier 5 (L40-60), Group A"],
+            ["Mecha Pulse", "Fortuna, Tier 5 (L40-60), Group B"],
+            ["Tek Collateral", "Fortuna, Tier 5 (L40-60), Group C"],
+        ],
+        "Fortuna Narmer": [
+            ["Boreal's Hatred", "Fortuna, Narmer, Group A"],
+            ["Amar's Anguish", "Fortuna, Narmer, Group A"],
+            ["Nira's Contempt", "Fortuna, Narmer, Group A"],
+            ["Nira's Hatred", "Fortuna, Narmer, Group B"],
+            ["Amar's Contempt", "Fortuna, Narmer, Group B"],
+            ["Boreal's Anguish", "Fortuna, Narmer, Group B"],
+            ["Amar's Hatred", "Fortuna, Narmer, Group C"],
+            ["Boreal's Contempt", "Fortuna, Narmer, Group C"],
+            ["Nira's Anguish", "Fortuna, Narmer, Group C"],
+        ],
+        "Profit-Taker Bounty": [
+            ["Quick Reload", "Profit-Taker Bounty, Phase 1"],
+            ["Deadly Efficiency", "Profit-Taker Bounty, Phase 1"],
+            ["Strain Eruption", "Profit-Taker Bounty, Phase 1"],
+
+            ["Resolute Focus", "Profit-Taker Bounty, Phase 2"],
+            ["Archgun Ace", "Profit-Taker Bounty, Phase 2"],
+            ["Strain Fever", "Profit-Taker Bounty, Phase 2"],
+
+            ["Marked Target", "Profit-Taker Bounty, Phase 3"],
+            ["Sabot Rounds", "Profit-Taker Bounty, Phase 3"],
+            ["Strain Infection", "Profit-Taker Bounty, Phase 3"],
+
+            ["Ammo Chain", "Profit-Taker Bounty, Phase 4"],
+            ["Critical Focus", "Profit-Taker Bounty, Phase 4"],
+            ["Strain Consume", "Profit-Taker Bounty, Phase 4"],
+        ],
+        "Necralisk Bounty": [
+            ["Catalyzer Link", "Necralisk Bounty, Tier 2 (L15-25), Group A"],
+            ["Embedded Catalyzer", "Necralisk Bounty, Tier 2 (L15-25), Group A"],
+            ["Weeping Wounds", "Necralisk Bounty, Tier 2 (L15-25), Group A"],
+            ["Nano-Applicator", "Necralisk Bounty, Tier 2 (L15-25), Group A"],
+
+            ["Shrapnel Shot", "Necralisk Bounty, Tier 2 (L15-25), Group B"],
+            ["Bladed Rounds", "Necralisk Bounty, Tier 2 (L15-25), Group B"],
+            ["Sharpened Bullets", "Necralisk Bounty, Tier 2 (L15-25), Group B"],
+            ["Maiming Strike", "Necralisk Bounty, Tier 2 (L15-25), Group B"],
+
+            ["Body Count", "Necralisk Bounty, Tier 2 (L15-25), Group C"],
+            ["Repeater Clip", "Necralisk Bounty, Tier 2 (L15-25), Group C"],
+            ["Spring-Loaded Chamber", "Necralisk Bounty, Tier 2 (L15-25), Group C"],
+            ["Pressurized Magazine", "Necralisk Bounty, Tier 2 (L15-25), Group C"],
+
+            ["Carnis Carapace", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+            ["Carnis Stinger", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+            ["Jugulus Carapace", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+            ["Jugulus Spines", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+            ["Saxum Carapace", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+            ["Saxum Spittle", "Necralisk Bounty, Tier 3 (L25-30), All Groups"],
+
+            ["Blood Rush", "Necralisk Bounty, Tier 4 (L30-40), Group A"],
+            ["Laser Sight", "Necralisk Bounty, Tier 4 (L30-40), Group A"],
+            ["Hydraulic Crosshairs", "Necralisk Bounty, Tier 4 (L30-40), Group A"],
+            ["Argon Scope", "Necralisk Bounty, Tier 4 (L30-40), Group A"],
+
+            ["Guided Ordnance", "Necralisk Bounty, Tier 4 (L30-40), Group B"],
+            ["Targeting Subsystem", "Necralisk Bounty, Tier 4 (L30-40), Group B"],
+            ["Focused Defense", "Necralisk Bounty, Tier 4 (L30-40), Group B"],
+            ["Narrow Barrel", "Necralisk Bounty, Tier 4 (L30-40), Group B"],
+        ],
+    }
+
+    """
+    every _list_* function return its metadata and ItemTable items 
+    e.g., return {"name": "Baro Mods / Weapons", "items": [...]}
+    """
+
+    def _list_baro(self):
+        baro_items = self.wwiki.get_baro_items(use_cache=True)
+        items = [
+            {"name": item_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": "Baro"}
+            for item_name in baro_items['mod']
+        ] + [
+            {"name": item_name, "type": "Weapon", "owned": "No", "tag": "", "status": "", "source": "Baro"}
+            for item_name in baro_items['weapon']
+        ]
+        return {
+            "name": "Baro Mods / Weapons",
+            "items": items
+        }
+    def _list_primed(self):
+        mod_names = self.wpe.get_mod_name_map(use_cache=True).values()
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": "Baro"}
+            for mod_name in mod_names
+            if "Primed" in mod_name
+        ]
+        return {
+            "name": "Primed Mods",
+            "items": items
+        }
+    def _list_corrupted(self):
+        # we assume there will be no more corrupted mods
+        mod_names = {
+             "Warframe": ["Blind Rage", "Catalyzing Shields", "Fleeting Expertise", "Narrow Minded", "Overextended", 
+             "Transient Fortitude"], 
+
+             "Primary": ["Tainted Mag", "Critical Delay", "Heavy Caliber", "Vile Precision", 
+             "Vile Acceleration", "Depleted Reload", "Burdened Magazine", "Vicious Spread", "Tainted Shell", 
+             "Frail Momentum", "Critical Deceleration"],
+
+             "Secondary": ["Anemic Agility", "Creeping Bullseye", "Hollow Point", 
+             "Magnum Force", "Tainted Clip"],
+
+             "Melee": ["Spoiled Strike", "Corrupt Charge"]
+        }
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": category, "status": "", "source": "Orokin Vault (4.1667%)"}
+            for category in mod_names
+            for mod_name in mod_names[category]
+        ]
+        return {
+            "name": "Corrupted Mods",
+            "items": items
+        }
+    def _list_nightmare(self):
+        data = [
+            ["Chilling Reload", "Primary", "Group A", "22.11%"],
+            ["Accelerated Blast", "Primary", "Group A", "18.97%"],
+            ["Ice Storm", "Secondary", "Group A", "18.97%"],
+            ["Stunning Speed", "Secondary", "Group A", "18.97%"],
+            ["Wildfire", "Primary", "Group A", "18.97%"],
+            ["Blaze", "Primary", "Group A", "1.01%"],
+            ["Hammer Shot", "Primary", "Group A", "1.01%"],
+
+            ["Drifting Contact", "Melee", "Group B", "22.56%"],
+            ["Armored Agility", "Warframe", "Group B", "15.49%"],
+            ["Fortitude", "Warframe", "Group B", "15.49%"],
+            ["Rending Strike", "Melee", "Group B", "15.49%"],
+            ["Seeking Fury", "Primary", "Group B", "15.49%"],
+            ["Shred", "Primary", "Group B", "15.49%"],
+            
+            ["Streamlined Form", "Warframe", "Group C", "22.56%"],
+            ["Animal Instinct", "Companion", "Group C", "15.49%"],
+            ["Constitution", "Warframe", "Group C", "15.49%"],
+            ["Focus Energy", "Melee", "Group C", "15.49%"],
+            ["Lethal Torrent", "Secondary", "Group C", "15.49%"],
+            ["Vigor", "Warframe", "Group C", "15.49%"],
+        ]
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": category, "status": "", "source": f"{group} ({drop_rate})"}
+            for mod_name, category, group, drop_rate in data
+        ]
+        return {
+            "name": "Nightmare Mods",
+            "items": items
+        }
+    def _list_cetus_bounty(self):
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": source}
+            for mod_name, source in self.bounty_data["Cetus Bounty"] + self.bounty_data["Cetus Ghoul Purge"] + self.bounty_data["Cetus Narmer"]
+        ]
+        return {
+            "name": "Cetus Bounty Mods",
+            "items": items
+        }
+    def _list_fortuna_bounty(self):
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": source}
+            for mod_name, source in self.bounty_data["Fortuna Bounty"] + self.bounty_data["Fortuna Narmer"]
+        ]
+        return {
+            "name": "Fortuna Bounty Mods",
+            "items": items
+        }
+    def _list_necralisk_bounty(self):
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": source}
+            for mod_name, source in self.bounty_data["Necralisk Bounty"]
+        ]
+        return {
+            "name": "Necralisk Bounty Mods",
+            "items": items
+        }
+    def _list_narmer_bounty(self):
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": source}
+            for mod_name, source in self.bounty_data["Cetus Narmer"] + self.bounty_data["Fortuna Narmer"]
+        ]
+        return {
+            "name": "Narmer Bounty Mods",
+            "items": items
+        }
+    def _list_syndicate_augment(self):
+        augment_mods = self.wwiki.get_warframe_pve_augment_mods(use_cache=True)
+        items = []
+        for data in augment_mods:
+            items.extend([
+                {"name": mod_name, "type": "Mod", "owned": "No", "tag": data['warframe'], "status": "", "source": ', '.join(data['syndicate'])}
+                for mod_name in data['mods']
+            ])
+        return {
+            "name": "Syndicate Warframe Augment Mods",
+            "items": items
+        }
+    def _list_nightwave(self):
+        data = self.wwiki.get_nightwave_items(use_cache=True)
+        items = [
+            {"name": item_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": "Nightwave (20 credits)"}
+            for item_name in data['mod']
+        ] + [
+            {"name": item_name, "type": "Weapon", "owned": "No", "tag": "", "status": "", "source": "Nightwave (50 credits)"}
+            for item_name in data['weapon']
+        ]
+        return {
+            "name": "Nightwave Mods / Weapons",
+            "items": items
+        }
+    def _list_requiem(self):
+        data = {
+            "Requiem": ["Fass", "Jahu", "Khra", "Lohk", "Netra", "Ris", "Vome", "Xata"],
+            "Antivirus": ["Anti-V", "ByteRyte", "Computer Cop", "Drive-Duster", "Keep-Clean", "Soft Safe", "Trojan Tracker", "Worm Away",]
+        }
+        source = {
+            "Requiem": "Requiem Relics",
+            "Antivirus": "Hollvania Bounties",
+        }
+        items = [
+            {"name": mod_name, "type": "Mod", "owned": "No", "tag": category, "status": "", "source": source[category]}
+            for category in data
+            for mod_name in data[category]
+        ]
+        return {
+            "name": "Requiem Mods",
+            "items": items
+        }
+    
+    def get_table(self):
+        """
+        get all table
+        return: { list_name: item_table, ... }
+        where:
+            list_name: name of the checklist, e.g., 'Baro Mods / Weapons', 'Primed Mods', etc.
+            item_table: ItemTable format: {
+                "headers": [
+                    {"id": "name", "name": "Item Name", "type": "string"},
+                    {"id": "type", "name": "Type", "type": "string"},
+                    {"id": "owned", "name": "Owned", "type": "string"},
+                    {"id": "tag", "name": "Tag", "type": "string"},
+                    {"id": "status", "name": "Status", "type": "string"},
+                    {"id": "source", "name": "Source", "type": "string"},
+                ],
+                "items": ...
+            }
+        for the items:
+            name: should be name (NOT uname)
+            type: should be in ["Mod", "Weapon"]
+            owned: should be "Yes" or "No" (we fill this value in at frontend)
+            tag: whatever text, comma separated
+            status: whatever text (we fill this value in at frontend)
+            source: whatever text
+        """
+
+        data_ls = [
+            self._list_baro(),
+            self._list_primed(),
+            self._list_corrupted(),
+            self._list_nightmare(),
+            self._list_cetus_bounty(),
+            self._list_fortuna_bounty(),
+            self._list_necralisk_bounty(),
+            self._list_narmer_bounty(),
+            self._list_syndicate_augment(),
+            self._list_nightwave(),
+            self._list_requiem(),
+        ]
+        ret = {}
+        headers = [
+            {"id": "name", "name": "Item Name", "type": "string", "setting": {"filterable": False}},
+            {"id": "type", "name": "Type", "type": "string"},
+            {"id": "owned", "name": "Owned", "type": "string"},
+            {"id": "tag", "name": "Tag", "type": "string"},
+            {"id": "status", "name": "Status", "type": "string"},
+            {"id": "source", "name": "Source", "type": "string"},
+        ]
+        for data in data_ls:
+            ret[data['name']] = {
+                "headers": headers,
+                "items": data['items']
+            }
+        return ret
+        
+@app.route('/api/missing_item_checklist')
+def missing_item_checklist():
+    checklist = MissingItemChecklist(wwiki, wpe)
+    return checklist.get_table()
+
 if __name__ == '__main__':
     refresh()
     app.run(debug=DEBUG, host=HOST, port=PORT)

@@ -2,14 +2,30 @@
 
 - Add logging for backend
   - more specifically, every single call to the 
-- add riven price support
-  - see: https://api.warframe.market/v1/auctions/search?type=riven&sort_by=price_asc&weapon_url_name=arbucep
-- fix variant related stuff
-  - also add variant data in the main riven infobox
-  - add riven infobox on riven lack incarnon page
-- (probably not related to this webpage but) add warframe market functionalities
-  - refresh all items (i.e., hide all & show each one separately)
-  - show which items we place on the market is having the current lowest price, AND whether the second lowest differs from us, AND be able to fix that issue
+- Add more inventory checks (that isn't supported by Alecaframe)
+  - Types:
+    - Baro mods / weapons
+    - Primed Mods
+    - Corrupted Mods
+    - Nightmare Mods
+    - Cetus Bounty Mods (Cetus / Ghoul Purge / Narmer)
+    - Fortuna Bounty Mods (Fortuna / Profit Taker / Narmer)
+    - Necralisk Bounty Mods (Necralisk / Isolation Vault)
+    - Warframe Augment Mods
+    - Nightwave Mods
+    - Requiem Mods
+  - Shows:
+    - type (text, mod / weapon)
+    - owned? (text, yes / no)
+    - additional tag (e.g., for parazon mods, is it antivirus or requiem)
+    - status (text, how many unequipped, how many equipped or upgraded)
+    - source (text, if applicable)
+  - # TODO: rewrite baro.jsx 
+  - Have a hide owned button? or make item table support setting multiple text at once?
+  - Have a search function inside the table itself that searches all plain text in there
+
+# Abandoned
+
 - analyze relics: see if there are one-off items (i.e., ALMOST becomes a proper set), or it is the one lacking (e.g., i have 2 neuroptics but 10 other items, neuroptics is the one lacking)
   - probably need set data from warframe.market or need to see the prime related recipe...
   - need all relic data...? probably already have that
@@ -28,6 +44,3 @@
         - the final product should have information like: what items is needed, how much do we have and how much (e.g., Volt Prime Blueprint 2/1), also need a multi layer infobox for the item
       - the count of each relic
       - max(lackingCount for all items in this relic)
-- deploy the inventory page on github page
-  - see what happens with get_api (LZML encoding error???? what???)
-  - see what even returned from api
