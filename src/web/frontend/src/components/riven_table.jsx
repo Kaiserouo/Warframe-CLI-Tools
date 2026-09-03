@@ -124,6 +124,12 @@ class RivenOrganizer {
       isUpgraded: [null, true, false],
       anyDupIsEquipped: [null, true, false],
       anyDupIsUpgraded: [null, true, false],
+
+      isPrimary: [null, true],
+      isSecondary: [null, true],
+      isMelee: [null, true],
+      isArchgun: [null, true],
+      isCompanion: [null, true],
     },
     sortOptions: {
       sortOrderType: [
@@ -131,6 +137,17 @@ class RivenOrganizer {
       ],
     }
   };
+
+  specialFilterCallback = {
+    // filter option -> callback function that takes rivenModInfo and returns a boolean
+    // (if the filter option is not in specialFilterCallback, then we just use rivenModInfo[filterOption] to filter)
+    isUpgraded: (rivenModInfo) => (rivenModInfo.upgradeFingerprint.lvl > 0),
+    isPrimary: (rivenModInfo) => (rivenModInfo.type === 'LongGuns'),
+    isSecondary: (rivenModInfo) => (rivenModInfo.type === 'Pistols'),
+    isMelee: (rivenModInfo) => (rivenModInfo.type === 'Melee'),
+    isArchgun: (rivenModInfo) => (rivenModInfo.type === 'SpaceGuns'),
+    isCompanion: (rivenModInfo) => (rivenModInfo.type === 'SentinelWeapons'),
+  }
 
   constructor() {
     this.setting = {
@@ -141,6 +158,11 @@ class RivenOrganizer {
         isUpgraded: null,
         anyDupIsEquipped: null,
         anyDupIsUpgraded: null,
+        isPrimary: null,
+        isSecondary: null,
+        isMelee: null,
+        isArchgun: null,
+        isCompanion: null,
       },
       sortOptions: {
         sortOrder: [
@@ -179,8 +201,8 @@ class RivenOrganizer {
           continue;
 
         let value = null;
-        if (filterKey === 'isUpgraded') {
-          value = rivenModInfo.upgradeFingerprint.lvl > 0;
+        if (filterKey in this.specialFilterCallback) {
+          value = this.specialFilterCallback[filterKey](rivenModInfo);
         } else {
           value = rivenModInfo[filterKey];
         }
@@ -239,6 +261,14 @@ function RivenFilterBar({rivenOrganizer, setRivenOrganizer}) {
     anyDupIsUpgraded: "Any Duplicate Is Upgraded",
   };
 
+  const categoryLabels = {
+    isPrimary: "Primary",
+    isSecondary: "Secondary",
+    isMelee: "Melee",
+    isArchgun: "Archgun",
+    isCompanion: "Companion",
+  }
+
   const handleFilterChange = useCallback((filterKey) => {
     setRivenOrganizer((prev) => {
       const newRivenOrganizer = new RivenOrganizer();
@@ -254,13 +284,26 @@ function RivenFilterBar({rivenOrganizer, setRivenOrganizer}) {
   }, [setRivenOrganizer]);
 
   return (<>
-      <div className="flex font-mono my-1">
+    <div className="flex font-mono my-1">
       <p className="mr-2 py-1 text-white text-lg">Filter: </p>
       {
         Object.keys(keyLabels).map((key) => (
           <FilterOptionToggleButton
             key={key}
             label={keyLabels[key]}
+            state={rivenOrganizer.setting.filterOptions[key]}
+            onClick={() => handleFilterChange(key)}
+          />
+        ))
+      }
+    </div>
+    <div className="flex font-mono my-1">
+      <p className="mr-2 py-1 text-white text-lg">Filter (Category): </p>
+      {
+        Object.keys(categoryLabels).map((key) => (
+          <FilterOptionToggleButton
+            key={key}
+            label={categoryLabels[key]}
             state={rivenOrganizer.setting.filterOptions[key]}
             onClick={() => handleFilterChange(key)}
           />

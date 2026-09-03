@@ -17,6 +17,7 @@ function getRivenModInfo(rivenData, rivenMod, inventoryData) {
   */
   const { 
     weapon_name_map: weaponNameMap, 
+    weapon_type_map: weaponTypeMap,
     weapon_riven_disposition: weaponRivenDispositionMap, 
     riven_loctag_map: rivenLoctagMap, 
     icon_map: iconMap,
@@ -27,6 +28,7 @@ function getRivenModInfo(rivenData, rivenMod, inventoryData) {
 
   const oid = rivenMod["ItemId"]["$oid"];
   const uname = upgradeFingerprint.compat;
+  const type = weaponTypeMap[upgradeFingerprint.compat] || "Unknown";
   const weaponName = weaponNameMap[upgradeFingerprint.compat] || upgradeFingerprint.compat;
   const disposition = weaponRivenDispositionMap[upgradeFingerprint.compat] || 0;
   const itemType = rivenMod.ItemType;
@@ -62,6 +64,7 @@ function getRivenModInfo(rivenData, rivenMod, inventoryData) {
     upgradeFingerprint: upgradeFingerprint,
     weaponName: weaponName,
     uname: uname,
+    type: type,
     itemType: rivenMod.ItemType,
     disposition: disposition,
     family: family,

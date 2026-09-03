@@ -2,27 +2,6 @@
 
 - Add logging for backend
   - more specifically, every single call to the 
-- Add more inventory checks (that isn't supported by Alecaframe)
-  - Types:
-    - Baro mods / weapons
-    - Primed Mods
-    - Corrupted Mods
-    - Nightmare Mods
-    - Cetus Bounty Mods (Cetus / Ghoul Purge / Narmer)
-    - Fortuna Bounty Mods (Fortuna / Profit Taker / Narmer)
-    - Necralisk Bounty Mods (Necralisk / Isolation Vault)
-    - Warframe Augment Mods
-    - Nightwave Mods
-    - Requiem Mods
-  - Shows:
-    - type (text, mod / weapon)
-    - owned? (text, yes / no)
-    - additional tag (e.g., for parazon mods, is it antivirus or requiem)
-    - status (text, how many unequipped, how many equipped or upgraded)
-    - source (text, if applicable)
-  - # TODO: rewrite baro.jsx 
-  - Have a hide owned button? or make item table support setting multiple text at once?
-  - Have a search function inside the table itself that searches all plain text in there
 
 # Abandoned
 

@@ -905,6 +905,7 @@ def function_best_trade():
 def data_public_export(lang, function_name):
     function_map = {
         'get_weapon_name_map': lambda lang: wpe.get_weapon_name_map(lang, use_cache=True),
+        'get_weapon_type_map': lambda lang: wpe.get_weapon_type_map(lang, use_cache=True),
         'get_weapon_riven_disposition': lambda lang: wpe.get_weapon_riven_disposition(use_cache=True),
         'get_riven_loctag_map': lambda lang: wpe.get_riven_loctag_map(lang, use_cache=True),
         'get_incarnon_weapons': lambda lang: wpe.get_incarnon_weapons(use_cache=True),
@@ -1115,17 +1116,6 @@ class MissingItemChecklist:
             "name": "Baro Mods / Weapons",
             "items": items
         }
-    def _list_primed(self):
-        mod_names = self.wpe.get_mod_name_map(use_cache=True).values()
-        items = [
-            {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": "Baro"}
-            for mod_name in mod_names
-            if "Primed" in mod_name
-        ]
-        return {
-            "name": "Primed Mods",
-            "items": items
-        }
     def _list_corrupted(self):
         # we assume there will be no more corrupted mods
         mod_names = {
@@ -1194,7 +1184,7 @@ class MissingItemChecklist:
     def _list_fortuna_bounty(self):
         items = [
             {"name": mod_name, "type": "Mod", "owned": "No", "tag": "", "status": "", "source": source}
-            for mod_name, source in self.bounty_data["Fortuna Bounty"] + self.bounty_data["Fortuna Narmer"]
+            for mod_name, source in self.bounty_data["Fortuna Bounty"] + self.bounty_data["Fortuna Narmer"] + self.bounty_data["Profit-Taker Bounty"]
         ]
         return {
             "name": "Fortuna Bounty Mods",
@@ -1290,7 +1280,6 @@ class MissingItemChecklist:
 
         data_ls = [
             self._list_baro(),
-            self._list_primed(),
             self._list_corrupted(),
             self._list_nightmare(),
             self._list_cetus_bounty(),

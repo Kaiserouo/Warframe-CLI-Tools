@@ -235,7 +235,22 @@ class WarframePublicExport:
             for weapon in weapons
         }
         return weapon_un_map
-    
+
+    def get_weapon_type_map(self, lang='en', use_cache=True):
+        """
+            map from uname to weapon type,
+            weapon type is string in {
+                'LongGuns', 'SpecialItems', 'OperatorAmps', 'SentinelWeapons', 
+                'Melee', 'SpaceMelee', 'Pistols', 'SpaceGuns'
+            }
+        """
+        weapons = self._get_public_export('ExportWeapons', lang, use_cache)
+        weapon_type_map = {
+            weapon['uniqueName']: weapon['productCategory']
+            for weapon in weapons
+        }
+        return weapon_type_map
+
     def get_weapon_riven_disposition(self, use_cache=True):
         """
         get a mapping of weapon unique names to their riven disposition
@@ -1074,7 +1089,9 @@ if __name__ == '__main__':
     # main_incarnon()
     # main_corrupted_mods()
     # main_explore_inventory()
-    print(WarframeWiki().get_augment_mods())
+    # print(WarframeWiki().get_augment_mods())
     # main_get_platform_name()
     # main_public_export()
     # main_disposition()
+    pe_weapon = WarframePublicExport()._get_public_export('ExportWeapons')
+    print(set([w['productCategory'] for w in pe_weapon]))

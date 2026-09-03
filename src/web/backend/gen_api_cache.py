@@ -13,6 +13,7 @@ fetch_urls = [
     # must NOT start with "/"
     # for 'api/hello', we request "/api/hello" and store the result in "<fetch_output_dir_path>/api/hello"
     'api/public_export/data/en/get_weapon_name_map',
+    'api/public_export/data/en/get_weapon_type_map',
     'api/public_export/data/en/get_weapon_riven_disposition',
     'api/public_export/data/en/get_riven_loctag_map',
     'api/public_export/data/en/get_incarnon_weapons',
