@@ -19,6 +19,10 @@ export default defineConfig(({ mode }) => {
       svgr(),
     ],
 
+    define: {
+      __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
+    },
+
     server: {   // tmp server proxy for backend API calls
       proxy: {
         '/api': {

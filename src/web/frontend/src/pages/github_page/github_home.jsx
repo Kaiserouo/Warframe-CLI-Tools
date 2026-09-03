@@ -17,6 +17,8 @@ export default function GithubHome({ setting }) {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="font-bold underline decoration-dashed underline-offset-2 hover:text-blue-400">build the project manually</a> if you want to access all functionalities.</p>
+                <br />
+                <p className="text-sm text-gray-400">(The data cache is fetched at: {new Date(__BUILD_DATE__).toLocaleString()})</p>
             </div>
         </div>
         <Home setting={setting} />
