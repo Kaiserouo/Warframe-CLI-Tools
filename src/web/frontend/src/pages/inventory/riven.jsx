@@ -269,9 +269,7 @@ export default function Riven({setting}) {
       />
     )}
     
-    {setting.inventory === null ? <div className="text-white font-mono my-2 font-extrabold">
-      [ No inventory file loaded. Please load your inventory file in the Options &gt; Inventory File.]
-    </div> : null}
+    {setting.inventory === null ? <Loading message="No inventory file loaded. Please load your inventory file in the Options &gt; Inventory File." /> : null}
   </div>
   </>);
 }

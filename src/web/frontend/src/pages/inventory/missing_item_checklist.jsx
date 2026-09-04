@@ -67,7 +67,8 @@ export default function MissingItemChecklist({setting}) {
   }, [micData, setting.inventory]);
 
   const itemTable = useMemo(() => {
-    if (!micData || !setting.inventory) {
+    if (!micData) {
+        // note that if the user doesn't have the inventory file loaded, we still want to show the checklist
         return null;
     }
 
@@ -91,10 +92,6 @@ export default function MissingItemChecklist({setting}) {
         return item;
     });
 
-    for (let item of items) {
-
-    }
-
     return { headers: headers, items: items };
   }, [micData, ownedItems, choice]);
 
@@ -111,12 +108,11 @@ export default function MissingItemChecklist({setting}) {
     {micIsPending ? <Loading message="Loading Checklist Data" /> : null}
     {!micIsPending && micError ? <Error message={`ERROR: ${micError}`} /> : null}
 
-    {micData && setting.inventory !== null ? <SelectMenu options={Object.keys(micData.missing_item_checklist)} choice={choice} setChoice={setChoice} setting={setting} /> : null}
-    {micData && setting.inventory !== null ? <ItemTable itemTable={itemTable} setting={setting} /> : null}
+    {micData ? <SelectMenu options={Object.keys(micData.missing_item_checklist)} choice={choice} setChoice={setChoice} setting={setting} /> : null}
+    {setting.inventory === null ? <Loading message="No inventory file loaded. Please load your inventory file in the Options &gt; Inventory File." /> : null}
+    {micData && itemTable ? <ItemTable itemTable={itemTable} setting={setting} /> : null}
 
-    {setting.inventory === null ? <div className="text-white font-mono my-2 font-extrabold">
-      [ No inventory file loaded. Please load your inventory file in the Options &gt; Inventory File.]
-    </div> : null}
+
     
     </div>
   </>);

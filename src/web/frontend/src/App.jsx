@@ -48,10 +48,10 @@ let pageMap = {
     'name': 'Best Trade',
     'factory': (setting) => (<BestTrade setting={setting} />)
   },
-  'test': {
-    'name': 'Test',
-    'factory': (setting) => (<Test setting={setting} />)
-  },
+  // 'test': {
+  //   'name': 'Test',
+  //   'factory': (setting) => (<Test setting={setting} />)
+  // },
   'inventory': {
     'name': 'Inventory',
     'factory': (setting) => (<Inventory setting={setting} />)
@@ -63,10 +63,10 @@ let githubPageMap = {
     'name': 'Home',
     'factory': (setting) => (<GithubHome setting={setting} />)
   },
-  'item_info': {
-    'name': 'Item Info',
-    'factory': (setting) => (<GithubNoPage pageTitle="Item Info" />)
-  },
+  // 'item_info': {
+  //   'name': 'Item Info',
+  //   'factory': (setting) => (<GithubNoPage pageTitle="Item Info" />)
+  // },
   'inventory': {
     'name': 'Inventory',
     'factory': (setting) => (<Inventory setting={setting} />)
